@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PulsePay - Início</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5fb;
+            color: #26334a;
+        }
+
+        header {
+            background: #172d50;
+            color: white;
+            padding: 22px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        header span {
+            color: #65a5ff;
+        }
+
+        header p {
+            margin: 0;
+            color: #c6d5eb;
+            font-size: 14px;
+        }
+
+        .banner {
+            background: linear-gradient(120deg, #2456a6, #397fe0);
+            color: white;
+            padding: 55px 20px;
+            text-align: center;
+        }
+
+        .banner h2 {
+            font-size: 34px;
+            margin: 0 0 15px;
+        }
+
+        .banner p {
+            font-size: 17px;
+            color: #e1ebff;
+            margin: 0;
+        }
+
+        main {
+            max-width: 1050px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .titulo-secao {
+            color: #203b65;
+            font-size: 25px;
+            margin-bottom: 25px;
+        }
+
+        .opcoes {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 13px;
+            box-shadow: 0 4px 15px #0000000d;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 22px #00000015;
+        }
+
+        .icone {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #203b65;
+            font-size: 21px;
+            margin: 0 0 12px;
+        }
+
+        .card p {
+            color: #718096;
+            line-height: 1.6;
+            min-height: 50px;
+        }
+
+        .botao {
+            display: inline-block;
+            background: #2456a6;
+            color: white;
+            text-decoration: none;
+            padding: 13px 22px;
+            border-radius: 7px;
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+
+        .botao:hover {
+            background: #193f80;
+        }
+
+        footer {
+            text-align: center;
+            color: #7d899b;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 650px) {
+            header {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .banner h2 {
+                font-size: 27px;
+            }
+
+            .opcoes {
+                grid-template-columns: 1fr;
+            }
+
+            main {
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Pulse<span>Pay</span></h1>
+    <p>Sua carteira digital</p>
+</header>
+
+<section class="banner">
+
+    <h2>Bem-vindo ao PulsePay!</h2>
+
+    <p>
+        Simplicidade e praticidade para movimentar seu dinheiro.
+    </p>
+
+</section>
+
+<main>
+
+    <h2 class="titulo-secao">O que deseja fazer?</h2>
+
+    <div class="opcoes">
+
+        <section class="card">
+
+            <div class="icone">👤</div>
+
+            <h3>Abrir conta</h3>
+
+            <p>
+                Cadastre-se no PulsePay e crie sua
+                carteira digital.
+            </p>
+
+            <a href="/cadastro" class="botao">
+                Abrir conta
+            </a>
+
+        </section>
+
+        <section class="card">
+
+            <div class="icone">💳</div>
+
+            <h3>Minha carteira</h3>
+
+            <p>
+                Consulte seus dados, saldo disponível
+                e histórico de movimentações.
+            </p>
+
+            <a href="/carteira" class="botao">
+                Consultar carteira
+            </a>
+
+        </section>
+
+        <section class="card">
+
+            <div class="icone">💸</div>
+
+            <h3>Transferências</h3>
+
+            <p>
+                Envie dinheiro para outras contas
+                cadastradas no PulsePay.
+            </p>
+
+            <a href="/carteira" class="botao">
+                Transferir dinheiro
+            </a>
+
+        </section>
+
+        <section class="card">
+
+            <div class="icone">🏦</div>
+
+            <h3>Depósitos</h3>
+
+            <p>
+                Adicione valores à sua carteira
+                de maneira simples e rápida.
+            </p>
+
+            <a href="/deposito.html" class="botao">
+                Realizar depósito
+            </a>
+
+        </section>
+
+    </div>
+
+</main>
+
+<footer>
+    PulsePay - Projeto acadêmico de carteira digital
+    <br><br>
+    © 2026 PulsePay
+</footer>
+
+</body>
+</html>

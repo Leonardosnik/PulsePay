@@ -1,0 +1,836 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulsePay - Minha carteira</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f4f9;
+            color: #26334a;
+        }
+
+        header {
+            background: #172d50;
+            color: white;
+            padding: 22px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        header span {
+            color: #a9c7ff;
+        }
+
+        .acoes-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .link-inicio {
+            color: white;
+            text-decoration: none;
+            padding: 10px 14px;
+            border: 1px solid #7893bb;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .link-inicio:hover {
+            background: #29466f;
+        }
+
+        .botao-sair {
+            background: #bd4141;
+            color: white;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .botao-sair:hover {
+            background: #963131;
+        }
+
+        main {
+            max-width: 1050px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .topo h2 {
+            margin: 0;
+        }
+
+        .controles {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input, button {
+            padding: 11px 14px;
+            border-radius: 6px;
+            border: 1px solid #d5dce8;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        button {
+            background: #2456a6;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #193f80;
+        }
+
+        button:disabled {
+            background: #78869b;
+            cursor: not-allowed;
+        }
+
+        .cartao-saldo {
+            background: linear-gradient(120deg, #1d3e70, #3474c9);
+            color: white;
+            padding: 28px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .cartao-saldo p {
+            margin: 0 0 12px;
+            color: #d7e5ff;
+        }
+
+        .saldo {
+            font-size: 34px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .informacoes {
+            font-size: 14px;
+            color: #e1ebff;
+        }
+
+        .grade {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .painel {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #0000000b;
+            min-width: 0;
+        }
+
+        .painel h3 {
+            margin-top: 0;
+            color: #203b65;
+        }
+
+        .campo {
+            margin-bottom: 16px;
+        }
+
+        .campo label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        #status {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .conectado {
+            color: #16834b;
+        }
+
+        .desconectado {
+            color: #bd4141;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 0;
+        }
+
+        li {
+            padding: 13px;
+            margin-top: 10px;
+            background: #f1f5fb;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .vazio {
+            color: #78869b;
+            font-size: 14px;
+        }
+
+        .movimentacao {
+            border-bottom: 1px solid #edf0f5;
+            padding: 14px 0;
+            font-size: 14px;
+        }
+
+        .movimentacao:last-child {
+            border-bottom: none;
+        }
+
+        .valor {
+            font-weight: bold;
+            color: #2456a6;
+            margin-top: 7px;
+        }
+
+        .data-movimentacao {
+            color: #78869b;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .entrada {
+            color: #16834b;
+        }
+
+        .saida {
+            color: #bd4141;
+        }
+
+        .tipo-movimentacao {
+            display: inline-block;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            background: #edf2fa;
+            margin-top: 6px;
+        }
+
+        footer {
+            text-align: center;
+            color: #7d899b;
+            padding: 30px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            .grade {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 20px;
+            }
+
+            .saldo {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Pulse<span>Pay</span></h1>
+
+    <div class="acoes-header">
+        <a href="/index.html" class="link-inicio">
+            Voltar ao início
+        </a>
+
+        <button class="botao-sair" onclick="logout()">
+            Sair da conta
+        </button>
+    </div>
+</header>
+
+<main>
+
+    <div class="topo">
+
+        <h2>Minha carteira</h2>
+
+        <div class="controles">
+
+            <button onclick="loadDashboard()">
+                Atualizar carteira
+            </button>
+
+            <button onclick="connectNotifications()">
+                Conectar notificações
+            </button>
+
+        </div>
+
+    </div>
+
+    <section class="cartao-saldo">
+
+        <p>Saldo disponível</p>
+
+        <div class="saldo" id="balance">
+            R$ 0,00
+        </div>
+
+        <div class="informacoes" id="accountInfo">
+            Carregando sua carteira...
+        </div>
+
+    </section>
+
+    <div class="grade">
+
+        <section class="painel">
+
+            <h3>Transferir dinheiro</h3>
+
+            <div class="campo">
+
+                <label for="receiverId">
+                    Conta de destino
+                </label>
+
+                <input
+                        type="number"
+                        id="receiverId"
+                        placeholder="Número da conta"
+                        min="1"
+                        required
+                >
+
+            </div>
+
+            <div class="campo">
+
+                <label for="transferAmount">
+                    Valor da transferência
+                </label>
+
+                <input
+                        type="number"
+                        id="transferAmount"
+                        placeholder="R$ 0,00"
+                        min="0.01"
+                        step="0.01"
+                        required
+                >
+
+            </div>
+
+            <button
+                    id="transferButton"
+                    onclick="transferMoney()"
+            >
+                Transferir
+            </button>
+
+        </section>
+
+        <section class="painel">
+
+            <h3>Notificações</h3>
+
+            <p id="status" class="desconectado">
+                Desconectado
+            </p>
+
+            <ul id="notifications">
+
+                <li class="vazio">
+                    Nenhuma notificação recebida.
+                </li>
+
+            </ul>
+
+        </section>
+
+        <section class="painel">
+
+            <h3>Extrato bancário</h3>
+
+            <div id="history">
+
+                <p class="vazio">
+                    Carregando extrato...
+                </p>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+<footer>
+    PulsePay - Projeto acadêmico de carteira digital
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+
+<script>
+
+    let stompClient = null;
+    let currentAccountId = null;
+
+    const statusElement = document.getElementById("status");
+
+    // Formatar valores monetários
+
+    function formatMoney(value) {
+
+        return Number(value || 0).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+
+    }
+
+    // Consultar automaticamente a carteira autenticada
+
+    async function loadDashboard() {
+
+        const accountInfo = document.getElementById("accountInfo");
+
+        try {
+
+            const response = await fetch("/api/accounts");
+
+            if (response.status === 401) {
+                window.location.href = "/login.html";
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error("Não foi possível consultar sua carteira. Verifique seu login.");
+            }
+
+            const accounts = await response.json();
+
+            if (!Array.isArray(accounts) || accounts.length === 0) {
+                throw new Error("Nenhuma carteira encontrada para o usuário conectado.");
+            }
+
+            const account = accounts[0];
+
+            currentAccountId = account.id;
+
+            document.getElementById("balance").textContent =
+                formatMoney(account.balance);
+
+            accountInfo.textContent =
+                "Titular: " + account.name + " | Conta: " + account.id;
+
+            await loadHistory();
+
+        } catch (error) {
+
+            accountInfo.textContent = error.message;
+
+            document.getElementById("history").textContent =
+                "Não foi possível consultar o extrato.";
+
+            currentAccountId = null;
+
+        }
+
+    }
+
+    // Encerrar sessão da conta
+
+    async function logout() {
+
+        const confirmacao = confirm(
+            "Deseja realmente sair da sua conta PulsePay?"
+        );
+
+        if (!confirmacao) {
+            return;
+        }
+
+        const logoutButton = document.querySelector(".botao-sair");
+
+        logoutButton.disabled = true;
+        logoutButton.textContent = "Saindo...";
+
+        try {
+
+            // Desconectar notificações
+
+            if (stompClient) {
+                await stompClient.deactivate();
+                stompClient = null;
+            }
+
+            // Encerrar sessão no Spring Security
+
+            const response = await fetch("/api/auth/logout", {
+                method: "POST"
+            });
+
+            if (!response.ok) {
+                throw new Error("Não foi possível encerrar a sessão.");
+            }
+
+            currentAccountId = null;
+
+            window.location.replace("/login.html");
+
+        } catch (error) {
+
+            alert("Erro ao sair da conta: " + error.message);
+
+            logoutButton.disabled = false;
+            logoutButton.textContent = "Sair da conta";
+
+        }
+
+    }
+
+    // Realizar transferência
+
+    async function transferMoney() {
+
+        const receiverId = document.getElementById("receiverId").value;
+
+        const amount = document.getElementById("transferAmount").value;
+
+        const transferButton = document.getElementById("transferButton");
+
+        if (!currentAccountId) {
+            alert("Sua carteira ainda não foi carregada.");
+            return;
+        }
+
+        if (!receiverId || !amount) {
+            alert("Preencha todos os campos da transferência.");
+            return;
+        }
+
+        if (Number(currentAccountId) === Number(receiverId)) {
+            alert("Não é possível transferir para a própria conta.");
+            return;
+        }
+
+        if (!Number.isFinite(Number(amount)) || Number(amount) <= 0) {
+            alert("Informe um valor maior que zero.");
+            return;
+        }
+
+        transferButton.disabled = true;
+        transferButton.textContent = "Transferindo...";
+
+        try {
+
+            const response = await fetch("/api/transfers", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    receiverId: Number(receiverId),
+                    amount: Number(amount)
+                })
+
+            });
+
+            if (response.status === 401) {
+                window.location.href = "/login.html";
+                return;
+            }
+
+            if (!response.ok) {
+
+                const errorText = await response.text();
+
+                let errorMessage = errorText;
+
+                try {
+
+                    const errorData = JSON.parse(errorText);
+
+                    errorMessage =
+                        errorData.message ||
+                        errorData.error ||
+                        errorText;
+
+                } catch (e) {
+                    // Resposta não era JSON.
+                }
+
+                throw new Error(
+                    errorMessage || "Não foi possível realizar a transferência."
+                );
+
+            }
+
+            const transfer = await response.json();
+
+            alert(
+                "Transferência realizada com sucesso!\n" +
+                "Valor: " + formatMoney(transfer.amount)
+            );
+
+            document.getElementById("receiverId").value = "";
+            document.getElementById("transferAmount").value = "";
+
+            await loadDashboard();
+
+        } catch (error) {
+
+            alert("Erro na transferência: " + error.message);
+
+        } finally {
+
+            transferButton.disabled = false;
+            transferButton.textContent = "Transferir";
+
+        }
+
+    }
+
+    // Consultar somente o extrato da conta autenticada
+
+    async function loadHistory() {
+
+        const historyElement = document.getElementById("history");
+
+        try {
+
+            const response = await fetch("/api/operations");
+
+            if (response.status === 401) {
+                window.location.href = "/login.html";
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error("Não foi possível consultar o extrato.");
+            }
+
+            const operations = await response.json();
+
+            historyElement.replaceChildren();
+
+            if (operations.length === 0) {
+
+                historyElement.textContent =
+                    "Nenhuma movimentação encontrada.";
+
+                historyElement.className = "vazio";
+
+                return;
+
+            }
+
+            historyElement.className = "";
+
+            operations.slice().reverse().forEach(operation => {
+
+                const item = document.createElement("div");
+
+                item.className = "movimentacao";
+
+                const description = document.createElement("div");
+
+                description.textContent =
+                    operation.description || operation.type;
+
+                const date = document.createElement("div");
+
+                date.className = "data-movimentacao";
+
+                date.textContent = new Date(operation.createdAt)
+                    .toLocaleString("pt-BR");
+
+                const type = document.createElement("span");
+
+                type.className = "tipo-movimentacao";
+
+                type.textContent = operation.type;
+
+                const amount = document.createElement("div");
+
+                amount.className = "valor";
+
+                if (operation.amount == null) {
+
+                    amount.textContent = "—";
+
+                } else {
+
+                    amount.textContent = formatMoney(operation.amount);
+
+                    if (
+                        operation.type === "TRANSFERENCIA_RECEBIDA" ||
+                        operation.type === "DEPOSITO"
+                    ) {
+
+                        amount.classList.add("entrada");
+
+                    } else if (operation.type === "TRANSFERENCIA") {
+
+                        amount.classList.add("saida");
+
+                    }
+
+                }
+
+                item.appendChild(description);
+                item.appendChild(date);
+                item.appendChild(type);
+                item.appendChild(amount);
+
+                historyElement.appendChild(item);
+
+            });
+
+        } catch (error) {
+
+            historyElement.textContent = error.message;
+            historyElement.className = "vazio";
+
+        }
+
+    }
+
+    // Conectar notificações da própria conta
+
+    function connectNotifications() {
+
+        if (!currentAccountId) {
+            alert("Sua carteira ainda não foi carregada.");
+            return;
+        }
+
+        if (stompClient) {
+            stompClient.deactivate();
+        }
+
+        statusElement.textContent = "Conectando...";
+        statusElement.className = "";
+
+        stompClient = new StompJs.Client({
+
+            brokerURL: "ws://localhost:8080/ws",
+
+            reconnectDelay: 5000,
+
+            onConnect: () => {
+
+                statusElement.textContent = "Conectado ao PulsePay!";
+                statusElement.className = "conectado";
+
+                stompClient.subscribe(
+                    `/topic/accounts/${currentAccountId}`,
+                    async (message) => {
+
+                        const notification = JSON.parse(message.body);
+
+                        const item = document.createElement("li");
+
+                        item.textContent =
+                            notification.message +
+                            " Valor: " +
+                            formatMoney(notification.amount) +
+                            " | Remetente: " +
+                            notification.senderName;
+
+                        const notifications =
+                            document.getElementById("notifications");
+
+                        if (notifications.querySelector(".vazio")) {
+                            notifications.replaceChildren();
+                        }
+
+                        notifications.prepend(item);
+
+                        await loadDashboard();
+
+                    }
+                );
+
+            },
+
+            onStompError: () => {
+
+                statusElement.textContent = "Erro na comunicação.";
+                statusElement.className = "desconectado";
+
+            },
+
+            onWebSocketError: () => {
+
+                statusElement.textContent = "Erro na conexão WebSocket.";
+                statusElement.className = "desconectado";
+
+            },
+
+            onWebSocketClose: () => {
+
+                statusElement.textContent = "Conexão encerrada.";
+                statusElement.className = "desconectado";
+
+            }
+
+        });
+
+        stompClient.activate();
+
+    }
+
+    // Carregar a carteira assim que a página abrir
+
+    loadDashboard();
+
+</script>
+
+</body>
+</html>

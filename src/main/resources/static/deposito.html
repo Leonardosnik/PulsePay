@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulsePay - Depósito</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f2f6fc;
+            color: #263445;
+        }
+
+        header {
+            background: #155eef;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: #155eef;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 20px;
+            border: 1px solid #ccd5e0;
+            border-radius: 7px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #155eef;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0d47bd;
+        }
+
+        button:disabled {
+            background: #8ba9e8;
+            cursor: not-allowed;
+        }
+
+        #mensagem {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 7px;
+            text-align: center;
+            display: none;
+            white-space: pre-line;
+        }
+
+        .sucesso {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .erro {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .voltar {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #155eef;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>PulsePay</h1>
+    <p>Depósito em conta</p>
+</header>
+
+<div class="container">
+
+    <h2>Realizar depósito</h2>
+
+    <form id="depositForm">
+
+        <label for="amount">Valor do depósito (R$)</label>
+
+        <input
+                type="number"
+                id="amount"
+                min="0.01"
+                step="0.01"
+                placeholder="Ex.: 50,00"
+                required
+        >
+
+        <button type="submit" id="depositButton">
+            Realizar depósito
+        </button>
+
+    </form>
+
+    <div id="mensagem"></div>
+
+    <a href="index.html" class="voltar">
+        Voltar ao início
+    </a>
+
+</div>
+
+<script>
+
+    const form = document.getElementById("depositForm");
+    const mensagem = document.getElementById("mensagem");
+    const depositButton = document.getElementById("depositButton");
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const amount = Number(
+            document.getElementById("amount").value
+        );
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+            mostrarMensagem("Informe um valor válido para o depósito.", false);
+            return;
+        }
+
+        mensagem.style.display = "none";
+        depositButton.disabled = true;
+        depositButton.textContent = "Processando...";
+
+        try {
+
+            const response = await fetch("/api/deposits", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    amount: amount
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || data.error ||
+                    "Não foi possível realizar o depósito."
+                );
+            }
+
+            const valorFormatado = new Intl.NumberFormat(
+                "pt-BR",
+                {
+                    style: "currency",
+                    currency: "BRL"
+                }
+            ).format(amount);
+
+            const conta = data.id ? data.id : "Sua conta";
+
+            mostrarMensagem(
+                "Depósito realizado com sucesso!\n" +
+                "Conta: " + conta + "\n" +
+                "Valor: " + valorFormatado,
+                true
+            );
+
+            form.reset();
+
+        } catch (error) {
+
+            mostrarMensagem(error.message, false);
+
+        } finally {
+
+            depositButton.disabled = false;
+            depositButton.textContent = "Realizar depósito";
+
+        }
+
+    });
+
+    function mostrarMensagem(texto, sucesso) {
+
+        mensagem.className = sucesso ? "sucesso" : "erro";
+        mensagem.textContent = texto;
+        mensagem.style.display = "block";
+
+    }
+
+</script>
+
+</body>
+</html>
